@@ -1,6 +1,6 @@
 # AppExtensionCommunicator
 
-Communicate between extension and its containing app.
+Communicate between app extension and its containing app.
 
 
 ## Usage Example
@@ -16,6 +16,9 @@ That's all.
 
 Check the example project for a real world usage.
 		
+## Special Thanks
+I learned how to mix C into Swift framework thanks to <https://github.com/danieleggert/mixed-swift-objc-framework> created by [danieleggert](https://github.com/danieleggert).
+
 ## Creator
 
 * GitHub: <https://github.com/cxa>
