@@ -1,0 +1,2 @@
+SWIFT_INCLUDE_PATHS = $(SRCROOT)/AppExtensionCommunicator/AppExtensionCommunicatorHelper
+MODULEMAP_PRIVATE_FILE = $(SRCROOT)/AppExtensionCommunicator/AppExtensionCommunicatorHelper.modulemap
