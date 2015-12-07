@@ -7,12 +7,13 @@ Communicate between app extension and its containing app.
 
 You must enable app groups for containing app and extension before using `AppExtensionCommunicator`.
 
-1. Make an instance with app group container URL: `AppExtensionCommunicator(containerURL: containerURL)`
-2. Deliver message: `communicator.deliverMessage(message: MSG_AS_DICTIONARY, withIdentifier: ID_AS_STRING)`
-3. Observe message: `communicator.observeMessageForIdentifier(ID_AS_STRING) { message in
-        ...}`
+1. Make an instance with app group container URL: `AppExtensionCommunicator(containerURL: containerURL?)` or `AppExtensionCommunicator(grounpIdentifer: grounpIdentifer)`
+2. Deliver message: `communicator.deliverMessageWithIdentifier(identifier: ID, content: DICTIONARY)`
+3. Observe message:   `communicator?.observeMessageForIdentifier(ID) { message in ... }`
 
 That's all.
+
+*If you want to deliver message with content, the `containerURL` should not be nil.*
 
 Check the example project for a real world usage.
 

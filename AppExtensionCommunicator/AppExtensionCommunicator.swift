@@ -10,23 +10,28 @@ import Foundation
 //import AppExtensionCommunicatorHelper
 
 /// message values accept only plist data types: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html
-public typealias AppExtensionMessage = [String: AnyObject]
+public typealias AppExtensionMessageContent = [String: AnyObject]
 
-public typealias AppExtensionMessageHandler = AppExtensionMessage? -> ()
+public typealias AppExtensionMessageContentHandler = AppExtensionMessageContent? -> ()
 
 public class AppExtensionCommunicator {
   
-  let containerURL: NSURL
+  let containerURL: NSURL?
   
   /// `containerURL` Application group container directory, usually you can get it by `containerURLForSecurityApplicationGroupIdentifier` of `NSFileManager`
-  public init(containerURL theURL: NSURL) {
+  /// Pass nil if you don't need to deliver message content
+  public init(containerURL theURL: NSURL? = nil) {
     containerURL = theURL
-    _userInfoDir = containerURL.URLByAppendingPathComponent(".AppExtensionCommunicator")
-    _checkAndCreateUserInfoDir()
+    if let url = containerURL {
+      _userInfoDir = url.URLByAppendingPathComponent(".AppExtensionCommunicator")
+      _checkAndCreateUserInfoDir(_userInfoDir!)
+    } else {
+      _userInfoDir = nil
+    }
   }
   
-  public convenience init?(grounpIdentifer: String) {
-    guard let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer) else { return nil }
+  public convenience init(grounpIdentifer: String) {
+    let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer)
     self.init(containerURL: containerURL)
   }
   
@@ -36,21 +41,19 @@ public class AppExtensionCommunicator {
   }
   
   // MARK: private properties
-  private let _userInfoDir: NSURL
+  private let _userInfoDir: NSURL?
   
-  private lazy var _registeredHandlers = [String: AppExtensionMessageHandler]()
+  private lazy var _registeredHandlers = [String: AppExtensionMessageContentHandler]()
   
 }
 
 public extension AppExtensionCommunicator {
 
   /// Deliver `message` with `identifier`
-  public func deliverMessage(message: AppExtensionMessage? = nil, withIdentifier identifier: String) {
-    let target = _userInfoDir.URLByAppendingPathComponent(identifier)
-    if let msg = message {
-      NSDictionary.writeToURL(msg)(target, atomically: true)
-    } else {
-      try! NSFileManager().removeItemAtURL(target)
+  public func deliverMessageWithIdentifier(identifier identifier: String, content: AppExtensionMessageContent? = nil) {
+    if let target = _userInfoDir?.URLByAppendingPathComponent(identifier),
+      let cnt = content {
+        NSDictionary.writeToURL(cnt)(target, atomically: true)
     }
     
     let center = CFNotificationCenterGetDarwinNotifyCenter()
@@ -59,13 +62,13 @@ public extension AppExtensionCommunicator {
   }
   
   /// observe message with `identifier` using `messageHandler`
-  public func observeMessageForIdentifier(identifier: String, usingHandler messageHandler: AppExtensionMessageHandler) {
+  public func observeMessageForIdentifier(identifier: String, usingHandler contentHandler: AppExtensionMessageContentHandler) {
     if _registeredHandlers[identifier] == nil {
       let darwinCenter = CFNotificationCenterGetDarwinNotifyCenter()
       CFNotificationCenterAddObserver(darwinCenter, unsafeBitCast(self, UnsafePointer<()>.self), _callback, identifier, nil, .DeliverImmediately)
     }
     
-    _registeredHandlers[identifier] = messageHandler
+    _registeredHandlers[identifier] = contentHandler
   }
   
 }
@@ -75,27 +78,27 @@ private extension AppExtensionCommunicator {
   
   @objc func _handleNotificationCallbackWithName(name: String) {
     if let handler = _registeredHandlers[name] {
-      let target = _userInfoDir.URLByAppendingPathComponent(name)
-      let userInfo = NSDictionary(contentsOfURL: target) as? AppExtensionMessage
+      let target = _userInfoDir?.URLByAppendingPathComponent(name)
+      let userInfo = target.flatMap { NSDictionary(contentsOfURL: $0) as? AppExtensionMessageContent }
       handler(userInfo)
     }
   }
   
-  func _checkAndCreateUserInfoDir() {
+  func _checkAndCreateUserInfoDir(dir: NSURL) {
     let fm = NSFileManager()
     let dirExists: Bool = {
       var isDir = ObjCBool(true)
-      let e = fm.fileExistsAtPath(self._userInfoDir.path!, isDirectory: &isDir)
+      let e = fm.fileExistsAtPath(dir.path!, isDirectory: &isDir)
       if !isDir.boolValue {
-        try! fm.removeItemAtURL(self._userInfoDir)
+        try! fm.removeItemAtURL(dir)
         return false
       }
       
       return e
-      }()
+    }()
     
     if !dirExists {
-      try! fm.createDirectoryAtURL(_userInfoDir, withIntermediateDirectories: true, attributes: nil)
+      try! fm.createDirectoryAtURL(dir, withIntermediateDirectories: true, attributes: nil)
     }
   }
   

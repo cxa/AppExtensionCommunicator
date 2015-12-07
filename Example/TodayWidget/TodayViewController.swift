@@ -39,7 +39,7 @@ class TodayViewController: UIViewController {
   
   @objc private func _buttonTouchUpInside(btn: UIButton) {
     let r = arc4random_uniform(UInt32(Int32.max))
-    communicator?.deliverMessage(["random" : NSNumber(int: Int32(r))], withIdentifier: "AppExtensionCommunicatorExample")
+    communicator?.deliverMessageWithIdentifier(identifier: "AppExtensionCommunicatorExample", content: ["random" : NSNumber(int: Int32(r))])
   }
   
 }
