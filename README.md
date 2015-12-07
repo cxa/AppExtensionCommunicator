@@ -15,15 +15,12 @@ You must enable app groups for containing app and extension before using `AppExt
 That's all.
 
 Check the example project for a real world usage.
-		
-## Special Thanks
-I learned how to mix C into Swift framework thanks to <https://github.com/danieleggert/mixed-swift-objc-framework> created by [danieleggert](https://github.com/danieleggert).
 
 ## Creator
 
-* GitHub: <https://github.com/cxa>
 * Twitter: [@_cxa](https://twitter.com/_cxa)
-* Apps available in App Store: <http://lazyapps.com>
+* Apps available on the App Store: <http://lazyapps.com>
+* PayPal: xianan.chen+paypal 📧 gmail.com, buy me a cup of coffee if you find it's useful for you.
 
 ## License
 

@@ -31,7 +31,7 @@ class TodayViewController: UIViewController {
   
   private lazy var _button: UIButton = {
     let b = UIButton(frame: CGRectZero)
-    b.setTitle("Tap to Diliver Message", forState: .Normal)
+    b.setTitle("Diliver a Random Number", forState: .Normal)
     b.setTitleColor(UIColor.whiteColor(), forState: .Normal)
     b.setTitleColor(UIColor.blueColor(), forState: .Highlighted)
     b.addTarget(self, action: "_buttonTouchUpInside:", forControlEvents: .TouchUpInside)
@@ -41,7 +41,7 @@ class TodayViewController: UIViewController {
   
   @objc private func _buttonTouchUpInside(btn: UIButton) {
     let r = arc4random_uniform(UInt32(Int32.max))
-    communicator?.deliverMessage(message: ["random" : NSNumber(int: Int32(r))], withIdentifier: "AppExtensionCommunicatorExample")
+    communicator?.deliverMessage(["random" : NSNumber(int: Int32(r))], withIdentifier: "AppExtensionCommunicatorExample")
   }
   
 }

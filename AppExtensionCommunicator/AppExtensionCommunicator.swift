@@ -7,14 +7,13 @@
 //
 
 import Foundation
-import AppExtensionCommunicatorHelper
+//import AppExtensionCommunicatorHelper
 
 /// message values accept only plist data types: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html
 public typealias AppExtensionMessage = [String: AnyObject]
 
-public typealias AppExtensionMessageHandler = AppExtensionMessage? -> Void
+public typealias AppExtensionMessageHandler = AppExtensionMessage? -> ()
 
-@objc
 public class AppExtensionCommunicator {
   
   let containerURL: NSURL
@@ -26,32 +25,10 @@ public class AppExtensionCommunicator {
     _checkAndCreateUserInfoDir()
   }
   
+  
   deinit {
     let center = CFNotificationCenterGetDarwinNotifyCenter()
-    CFNotificationCenterRemoveEveryObserver(center, unsafeBitCast(self, UnsafePointer<Void>.self))
-  }
-  
-  /// Deliver `message` with `identifier`
-  public func deliverMessage(message: AppExtensionMessage? = nil, withIdentifier identifier: String) {
-    let target = _userInfoDir.URLByAppendingPathComponent(identifier)
-    if let info = message {
-      NSDictionary.writeToURL(info)(target, atomically: true)
-    } else {
-      NSFileManager().removeItemAtURL(target, error: nil)
-    }
-    
-    let center = CFNotificationCenterGetDarwinNotifyCenter()
-    let identifierCF = identifier as CFString
-    CFNotificationCenterPostNotification(center, identifierCF, nil, nil, 1)
-  }
-  
-  /// observe message with `identifier` using `messageHandler`
-  public func observeMessageForIdentifier(identifier: String, usingHandler messageHandler: AppExtensionMessageHandler) {
-    if _registeredHandlers[identifier] == nil {
-      addObserverWithNameForDarwinNotifyCenter(unsafeBitCast(self, UnsafePointer<Void>.self), identifier)
-    }
-    
-    _registeredHandlers[identifier] = messageHandler
+    CFNotificationCenterRemoveEveryObserver(center, unsafeBitCast(self, UnsafePointer<()>.self))
   }
   
   // MARK: private properties
@@ -59,6 +36,34 @@ public class AppExtensionCommunicator {
   private let _userInfoDir: NSURL
   
   private lazy var _registeredHandlers = [String: AppExtensionMessageHandler]()
+  
+}
+
+public extension AppExtensionCommunicator {
+
+  /// Deliver `message` with `identifier`
+  public func deliverMessage(message: AppExtensionMessage? = nil, withIdentifier identifier: String) {
+    let target = _userInfoDir.URLByAppendingPathComponent(identifier)
+    if let msg = message {
+      NSDictionary.writeToURL(msg)(target, atomically: true)
+    } else {
+      try! NSFileManager().removeItemAtURL(target)
+    }
+    
+    let center = CFNotificationCenterGetDarwinNotifyCenter()
+    let identifierCF = identifier as CFString
+    CFNotificationCenterPostNotification(center, identifierCF, nil, nil, true)
+  }
+  
+  /// observe message with `identifier` using `messageHandler`
+  public func observeMessageForIdentifier(identifier: String, usingHandler messageHandler: AppExtensionMessageHandler) {
+    if _registeredHandlers[identifier] == nil {
+      let darwinCenter = CFNotificationCenterGetDarwinNotifyCenter()
+      CFNotificationCenterAddObserver(darwinCenter, unsafeBitCast(self, UnsafePointer<()>.self), _callback, identifier, nil, .DeliverImmediately)
+    }
+    
+    _registeredHandlers[identifier] = messageHandler
+  }
   
 }
 
@@ -79,7 +84,7 @@ private extension AppExtensionCommunicator {
       var isDir = ObjCBool(true)
       let e = fm.fileExistsAtPath(self._userInfoDir.path!, isDirectory: &isDir)
       if !isDir.boolValue {
-        fm.removeItemAtURL(self._userInfoDir, error: nil)
+        try! fm.removeItemAtURL(self._userInfoDir)
         return false
       }
       
@@ -87,8 +92,15 @@ private extension AppExtensionCommunicator {
       }()
     
     if !dirExists {
-      fm.createDirectoryAtURL(_userInfoDir, withIntermediateDirectories: true, attributes: nil, error: nil)
+      try! fm.createDirectoryAtURL(_userInfoDir, withIntermediateDirectories: true, attributes: nil)
     }
   }
   
+}
+
+
+private func _callback(center: CFNotificationCenter!, observer: UnsafeMutablePointer<()>, notiName: CFString!, obj: UnsafePointer<()>, userInfo: CFDictionary!) -> () {
+  let communicator = unsafeBitCast(observer, AppExtensionCommunicator.self)
+  let name = notiName as String
+  communicator._handleNotificationCallbackWithName(name)
 }

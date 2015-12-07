@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		E01BB39E1A890AA300F33C39 /* AppExtensionCommunicator.h in Headers */ = {isa = PBXBuildFile; fileRef = E01BB39D1A890AA300F33C39 /* AppExtensionCommunicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E01BB3B51A890AC000F33C39 /* AppExtensionCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01BB3B41A890AC000F33C39 /* AppExtensionCommunicator.swift */; };
-		E01BB3B91A890BBE00F33C39 /* DarwinNotifyCenterCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = E01BB3B71A890BBE00F33C39 /* DarwinNotifyCenterCallback.h */; };
-		E01BB3BA1A890BBE00F33C39 /* DarwinNotifyCenterCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = E01BB3B81A890BBE00F33C39 /* DarwinNotifyCenterCallback.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,11 +16,6 @@
 		E01BB39C1A890AA300F33C39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E01BB39D1A890AA300F33C39 /* AppExtensionCommunicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppExtensionCommunicator.h; sourceTree = "<group>"; };
 		E01BB3B41A890AC000F33C39 /* AppExtensionCommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppExtensionCommunicator.swift; sourceTree = "<group>"; };
-		E01BB3B71A890BBE00F33C39 /* DarwinNotifyCenterCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DarwinNotifyCenterCallback.h; path = AppExtensionCommunicatorHelper/DarwinNotifyCenterCallback.h; sourceTree = "<group>"; };
-		E01BB3B81A890BBE00F33C39 /* DarwinNotifyCenterCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DarwinNotifyCenterCallback.m; path = AppExtensionCommunicatorHelper/DarwinNotifyCenterCallback.m; sourceTree = "<group>"; };
-		E01BB3BF1A890D8900F33C39 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = AppExtensionCommunicatorHelper/module.modulemap; sourceTree = "<group>"; };
-		E01BB4031A891AD300F33C39 /* AppExtensionCommunicator.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppExtensionCommunicator.xcconfig; sourceTree = "<group>"; };
-		E01BB4041A891AD300F33C39 /* AppExtensionCommunicatorHelper.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = AppExtensionCommunicatorHelper.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,21 +59,8 @@
 			isa = PBXGroup;
 			children = (
 				E01BB39C1A890AA300F33C39 /* Info.plist */,
-				E01BB3B61A890ACC00F33C39 /* Private Helpers */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		E01BB3B61A890ACC00F33C39 /* Private Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				E01BB4031A891AD300F33C39 /* AppExtensionCommunicator.xcconfig */,
-				E01BB4041A891AD300F33C39 /* AppExtensionCommunicatorHelper.modulemap */,
-				E01BB3BF1A890D8900F33C39 /* module.modulemap */,
-				E01BB3B71A890BBE00F33C39 /* DarwinNotifyCenterCallback.h */,
-				E01BB3B81A890BBE00F33C39 /* DarwinNotifyCenterCallback.m */,
-			);
-			name = "Private Helpers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -90,7 +70,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E01BB3B91A890BBE00F33C39 /* DarwinNotifyCenterCallback.h in Headers */,
 				E01BB39E1A890AA300F33C39 /* AppExtensionCommunicator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,7 +101,9 @@
 		E01BB38F1A890AA300F33C39 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastSwiftMigration = 0710;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "CHEN Xian’an";
 				TargetAttributes = {
 					E01BB3971A890AA300F33C39 = {
@@ -163,7 +144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E01BB3B51A890AC000F33C39 /* AppExtensionCommunicator.swift in Sources */,
-				E01BB3BA1A890BBE00F33C39 /* DarwinNotifyCenterCallback.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +152,6 @@
 /* Begin XCBuildConfiguration section */
 		E01BB3AC1A890AA300F33C39 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E01BB4031A891AD300F33C39 /* AppExtensionCommunicator.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -192,6 +171,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -219,7 +199,6 @@
 		};
 		E01BB3AD1A890AA300F33C39 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E01BB4031A891AD300F33C39 /* AppExtensionCommunicator.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -268,6 +247,7 @@
 				INFOPLIST_FILE = AppExtensionCommunicator/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lazyapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -285,6 +265,7 @@
 				INFOPLIST_FILE = AppExtensionCommunicator/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lazyapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

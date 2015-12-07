@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     if let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.com.lazyapps.AppExtensionCommunicatorExample") {
       communicator = AppExtensionCommunicator(containerURL: containerURL)
       communicator?.observeMessageForIdentifier("AppExtensionCommunicatorExample") { message in
-        self._textView.text = "Received Notification: \n\n\(message)"
+        self._textView.text = "Received Message: \n\n\(message)"
       }
     } else {
       _textView.text = "Setup App Groups Required"
