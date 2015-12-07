@@ -109,5 +109,4 @@ private func _callback(center: CFNotificationCenter!, observer: UnsafeMutablePoi
   let communicator = unsafeBitCast(observer, AppExtensionCommunicator.self)
   let name = notiName as String
   communicator._handleNotificationCallbackWithName(name)
-  print(communicator, name)
 }
