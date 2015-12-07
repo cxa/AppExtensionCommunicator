@@ -11,15 +11,14 @@ import AppExtensionCommunicator
 
 class ViewController: UIViewController {
 
-  var communicator: AppExtensionCommunicator?
+  let communicator: AppExtensionCommunicator? = AppExtensionCommunicator(grounpIdentifer: "group.com.lazyapps.AppExtensionCommunicatorExample")
   
   override func loadView() {
     super.loadView()
     navigationItem.title = "AppExtensionCommunicator Example"
     view.backgroundColor = UIColor.whiteColor()
     view.addSubview(_textView)
-    if let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.com.lazyapps.AppExtensionCommunicatorExample") {
-      communicator = AppExtensionCommunicator(containerURL: containerURL)
+    if let _ = communicator {
       communicator?.observeMessageForIdentifier("AppExtensionCommunicatorExample") { message in
         self._textView.text = "Received Message: \n\n\(message)"
       }

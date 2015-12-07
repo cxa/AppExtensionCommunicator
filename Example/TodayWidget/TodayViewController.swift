@@ -11,15 +11,13 @@ import AppExtensionCommunicator
 
 class TodayViewController: UIViewController {
   
-  var communicator: AppExtensionCommunicator?
+  let communicator: AppExtensionCommunicator? = AppExtensionCommunicator(grounpIdentifer: "group.com.lazyapps.AppExtensionCommunicatorExample")
   
   override func loadView() {
     super.loadView()
     preferredContentSize = CGSizeMake(0, 44)
     view.addSubview(_button)
-    if let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.com.lazyapps.AppExtensionCommunicatorExample") {
-      communicator = AppExtensionCommunicator(containerURL: containerURL)
-    } else {
+    if communicator == nil {
       _button.setTitle("Setup App Groups Required", forState: .Normal)
       _button.setTitleColor(UIColor.redColor(), forState: .Normal)
     }

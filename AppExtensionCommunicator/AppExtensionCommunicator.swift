@@ -25,6 +25,10 @@ public class AppExtensionCommunicator {
     _checkAndCreateUserInfoDir()
   }
   
+  public convenience init?(grounpIdentifer: String) {
+    guard let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer) else { return nil }
+    self.init(containerURL: containerURL)
+  }
   
   deinit {
     let center = CFNotificationCenterGetDarwinNotifyCenter()
@@ -32,7 +36,6 @@ public class AppExtensionCommunicator {
   }
   
   // MARK: private properties
-  
   private let _userInfoDir: NSURL
   
   private lazy var _registeredHandlers = [String: AppExtensionMessageHandler]()
