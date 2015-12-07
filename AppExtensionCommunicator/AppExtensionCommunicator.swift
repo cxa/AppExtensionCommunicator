@@ -30,8 +30,8 @@ public class AppExtensionCommunicator {
     }
   }
   
-  public convenience init(grounpIdentifer: String) {
-    let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer)
+  public convenience init?(grounpIdentifer: String) {
+    guard let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer) else { return nil }
     self.init(containerURL: containerURL)
   }
   
@@ -109,4 +109,5 @@ private func _callback(center: CFNotificationCenter!, observer: UnsafeMutablePoi
   let communicator = unsafeBitCast(observer, AppExtensionCommunicator.self)
   let name = notiName as String
   communicator._handleNotificationCallbackWithName(name)
+  print(communicator, name)
 }

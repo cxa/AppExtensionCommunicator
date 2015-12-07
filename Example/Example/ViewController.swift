@@ -13,17 +13,28 @@ class ViewController: UIViewController {
 
   let communicator: AppExtensionCommunicator? = AppExtensionCommunicator(grounpIdentifer: "group.com.lazyapps.AppExtensionCommunicatorExample")
   
+  let communicator2: AppExtensionCommunicator = AppExtensionCommunicator()
+  
+  
+  let id = "AppExtensionCommunicatorExample"
+  
+  let id2 = "AppExtensionCommunicatorExample2"
+  
   override func loadView() {
     super.loadView()
     navigationItem.title = "AppExtensionCommunicator Example"
     view.backgroundColor = UIColor.whiteColor()
     view.addSubview(_textView)
     if let _ = communicator {
-      communicator?.observeMessageForIdentifier("AppExtensionCommunicatorExample") { message in
+      communicator?.observeMessageForIdentifier(id) { message in
         self._textView.text = "Received Message: \n\n\(message)"
       }
     } else {
       _textView.text = "Setup App Groups Required"
+    }
+    
+    communicator2.observeMessageForIdentifier(id2) { msg in
+      self._textView.text = "Message of Communicator2 Should Be nil: \(msg)"
     }
   }
   
