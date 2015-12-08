@@ -7,7 +7,10 @@
 //
 
 import Foundation
-//import AppExtensionCommunicatorHelper
+
+public enum AppExtensionCommunicatorErrorType: ErrorType {
+  case FailToGetContainerURLByGrounpIdentifer
+}
 
 /// message values accept only plist data types: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html
 public typealias AppExtensionMessageContent = [String: AnyObject]
@@ -30,8 +33,11 @@ public class AppExtensionCommunicator {
     }
   }
   
-  public convenience init?(grounpIdentifer: String) {
-    guard let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer) else { return nil }
+  public convenience init(grounpIdentifer: String) throws {
+    guard let containerURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(grounpIdentifer) else {
+      throw AppExtensionCommunicatorErrorType.FailToGetContainerURLByGrounpIdentifer
+    }
+    
     self.init(containerURL: containerURL)
   }
   

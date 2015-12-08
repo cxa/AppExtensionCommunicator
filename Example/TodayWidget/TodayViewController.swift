@@ -11,7 +11,7 @@ import AppExtensionCommunicator
 
 class TodayViewController: UIViewController {
   
-  let communicator: AppExtensionCommunicator? = AppExtensionCommunicator(grounpIdentifer: "group.com.lazyapps.AppExtensionCommunicatorExample")
+  let communicator: AppExtensionCommunicator? = try? AppExtensionCommunicator(grounpIdentifer: "group.com.lazyapps.AppExtensionCommunicatorExample")
   
   let communicator2: AppExtensionCommunicator = AppExtensionCommunicator()
   

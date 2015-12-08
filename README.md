@@ -9,7 +9,7 @@ You must enable app groups for containing app and extension before using `AppExt
 
 1. Make an instance with app group container URL: `AppExtensionCommunicator(containerURL: containerURL?)` or `AppExtensionCommunicator(grounpIdentifer: grounpIdentifer)`
 2. Deliver message: `communicator.deliverMessageWithIdentifier(identifier: ID, content: DICTIONARY)`
-3. Observe message:   `communicator?.observeMessageForIdentifier(ID) { message in ... }`
+3. Observe message:   `communicator?.observeMessageForIdentifier(ID) { contentDic in ... }`
 
 That's all.
 
