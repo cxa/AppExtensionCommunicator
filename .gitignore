@@ -4,3 +4,18 @@ xcuserdata
 xcshareddata
 .DS_Store
 *.xcworkspace
+
+# Generated files and marketing assets (keep locally)
+build/
+DerivedData/
+.build/
+*.xcarchive/
+*.xcappdata/
+*.ipa
+*.dSYM/
+*.dSYM.zip
+xcuserdata/
+*.xcuserstate
+.asc/artifacts/
+__pycache__/
+*.py[cod]
