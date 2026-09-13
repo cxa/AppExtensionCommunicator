@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AppExtensionCommunicatorHelper
 
 /// message values accept only plist data types: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/PropertyLists/AboutPropertyLists/AboutPropertyLists.html
 public typealias AppExtensionMessage = [String: AnyObject]
@@ -47,7 +46,12 @@ public class AppExtensionCommunicator {
   /// observe message with `identifier` using `messageHandler`
   public func observeMessage(forIdentifier identifier: String, usingHandler messageHandler: @escaping AppExtensionMessageHandler) {
     if _registeredHandlers[identifier] == nil {
-      addObserverWithNameForDarwinNotifyCenter(unsafeBitCast(self, to: UnsafeRawPointer.self), identifier)
+      //addObserverWithNameForDarwinNotifyCenter(unsafeBitCast(self, to: UnsafeRawPointer.self), identifier)
+      CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), unsafeBitCast(self, to: UnsafeRawPointer.self), { center, observer, name, _, _ in
+        guard let observer = observer, let nameString = (name?.rawValue as String?) else { return }
+        let comm = Unmanaged<AppExtensionCommunicator>.fromOpaque(observer).takeUnretainedValue()
+        comm._handleNotificationCallbackWithName(nameString)
+      }, identifier as CFString, nil, .deliverImmediately)
     }
     
     _registeredHandlers[identifier] = messageHandler
@@ -90,3 +94,4 @@ private extension AppExtensionCommunicator {
     }
   }
 }
+
